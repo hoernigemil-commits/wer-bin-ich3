@@ -9,7 +9,7 @@ resetBtn.addEventListener("click", async (event) => {
   event.preventDefault(); // verhindert Page-Reload
 
   const password = document.getElementById("adminPass").value.trim();
-  if (password !== "1") { // Passwort ändern wenn nötig
+  if (password !== "1") { // <-- Passwort geändert
     alert("Falsches Passwort!");
     return;
   }
@@ -28,4 +28,3 @@ resetBtn.addEventListener("click", async (event) => {
     statusMessage.textContent = "❌ Fehler beim Zurücksetzen: " + error.message;
   }
 });
-
