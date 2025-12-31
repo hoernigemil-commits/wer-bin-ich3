@@ -1,22 +1,30 @@
-<!DOCTYPE html>
-<html lang="de">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Wer bin ich? - Reset</title>
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
-<div class="container">
-  <h1>⚠️ Admin Reset</h1>
-  <p>Nur verwenden, wenn ihr das Spiel zurücksetzen wollt!</p>
-  
-  <input id="adminPass" type="password" placeholder="Admin-Passwort">
-  <button type="button" id="resetBtn">Spiel zurücksetzen</button>
+import { db } from "./firebase.js";
+import { collection, getDocs, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
 
-  <p id="statusMessage" style="color: green; margin-top: 10px;"></p>
-</div>
+const playersRef = collection(db, "players");
+const resetBtn = document.getElementById("resetBtn");
+const statusMessage = document.getElementById("statusMessage");
 
-<script type="module" src="reset.js"></script>
-</body>
-</html>
+resetBtn.addEventListener("click", async (event) => {
+  event.preventDefault(); // verhindert Page-Reload
+
+  const password = document.getElementById("adminPass").value.trim();
+  if (password !== "1") { 
+    alert("Falsches Passwort!");
+    return;
+  }
+
+  if (!confirm("Willst du wirklich das Spiel zurücksetzen?")) return;
+
+  try {
+    const snapshot = await getDocs(playersRef);
+    for (const document of snapshot.docs) {
+      await deleteDoc(doc(db, "players", document.id));
+    }
+
+    statusMessage.textContent = "🎉 Spiel wurde erfolgreich zurückgesetzt!";
+    document.getElementById("adminPass").value = "";
+  } catch (error) {
+    statusMessage.textContent = "❌ Fehler beim Zurücksetzen: " + error.message;
+  }
+});
