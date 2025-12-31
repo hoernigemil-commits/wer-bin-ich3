@@ -9,7 +9,7 @@ resetBtn.addEventListener("click", async (event) => {
   event.preventDefault(); // verhindert Page-Reload
 
   const password = document.getElementById("adminPass").value.trim();
-  if (password !== "silvester2026") { // Passwort ändern wenn nötig
+  if (password !== "1") { // Passwort ändern wenn nötig
     alert("Falsches Passwort!");
     return;
   }
@@ -28,3 +28,4 @@ resetBtn.addEventListener("click", async (event) => {
     statusMessage.textContent = "❌ Fehler beim Zurücksetzen: " + error.message;
   }
 });
+
