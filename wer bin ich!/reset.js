@@ -9,7 +9,7 @@ resetBtn.addEventListener("click", async (event) => {
   event.preventDefault(); // verhindert Page-Reload
 
   const password = document.getElementById("adminPass").value.trim();
-  if (password !== "1") { 
+  if (password !== "1") { // Passwort ändern wenn nötig
     alert("Falsches Passwort!");
     return;
   }
@@ -17,17 +17,12 @@ resetBtn.addEventListener("click", async (event) => {
   if (!confirm("Willst du wirklich das Spiel zurücksetzen?")) return;
 
   try {
-    // Firestore leeren
     const snapshot = await getDocs(playersRef);
     for (const document of snapshot.docs) {
       await deleteDoc(doc(db, "players", document.id));
     }
 
-    // LocalStorage zurücksetzen
-    localStorage.removeItem("realName");
-    localStorage.removeItem("roleSubmitted");
-
-    statusMessage.textContent = "🎉 Spiel wurde erfolgreich zurückgesetzt! Du kannst jetzt neu starten.";
+    statusMessage.textContent = "🎉 Spiel wurde erfolgreich zurückgesetzt!";
     document.getElementById("adminPass").value = "";
   } catch (error) {
     statusMessage.textContent = "❌ Fehler beim Zurücksetzen: " + error.message;
