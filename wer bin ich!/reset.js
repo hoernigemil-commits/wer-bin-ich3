@@ -6,7 +6,7 @@ const playersRef = collection(db, "players");
 const resetBtn = document.getElementById("resetBtn");
 resetBtn.addEventListener("click", async () => {
   const password = document.getElementById("adminPass").value;
-  if (password !== "silvester2026") { // Passwort anpassen falls nötig
+  if (password !== "1") { // Passwort anpassen falls nötig
     alert("Falsches Passwort!");
     return;
   }
@@ -23,3 +23,4 @@ resetBtn.addEventListener("click", async () => {
   // Statt Weiterleitung: leere Input-Felder und Button bleibt sichtbar
   document.getElementById("adminPass").value = "";
 });
+
