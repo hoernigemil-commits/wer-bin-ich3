@@ -30,6 +30,15 @@ if (window.location.pathname.endsWith("role.html")) {
   });
 }
 
+/* ===== Helper: Shuffle Array ===== */
+function shuffleArray(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
+}
+
 /* ===== game.html ===== */
 async function loadGame() {
   const myName = localStorage.getItem("realName");
@@ -41,25 +50,32 @@ async function loadGame() {
   const snapshot = await getDocs(playersRef);
   const allPlayers = snapshot.docs.map(docSnap => docSnap.data());
 
-  // Filter: alle Spieler außer mir
-  const otherPlayers = allPlayers.filter(p => p.realName !== myName);
+  if (allPlayers.length < 2) {
+    list.innerHTML = "<p>Es müssen mindestens 2 Spieler teilnehmen!</p>";
+    return;
+  }
 
-  // Rollen aller Spieler außer mir
-  let roles = allPlayers.map(p => p.role).filter(role => {
-    const me = allPlayers.find(pl => pl.realName === myName);
-    return role !== me?.role;
+  // Rollen mischen
+  let roles = allPlayers.map(p => p.role);
+  roles = shuffleArray(roles);
+
+  // Prüfen & tauschen, falls jemand seine eigene Rolle bekommt
+  const finalAssignments = allPlayers.map((p, index) => {
+    if (roles[index] === p.role) {
+      const swapIndex = (index + 1) % roles.length;
+      [roles[index], roles[swapIndex]] = [roles[swapIndex], roles[index]];
+    }
+    return { realName: p.realName, role: roles[index] };
   });
 
-  // Shuffle Rollen
-  roles = roles.sort(() => Math.random() - 0.5);
-
-  // Zuweisung: jedem Spieler einen anderen Role geben
-  otherPlayers.forEach((p, i) => {
-    const assignedRole = roles[i % roles.length];
-    const div = document.createElement("div");
-    div.className = "card";
-    div.innerHTML = `<span>${p.realName}</span> = <strong>${assignedRole}</strong>`;
-    list.appendChild(div);
+  // Nur die anderen Spieler anzeigen
+  finalAssignments.forEach(p => {
+    if (p.realName !== myName) {
+      const div = document.createElement("div");
+      div.className = "card";
+      div.innerHTML = `<span>${p.realName}</span> = <strong>${p.role}</strong>`;
+      list.appendChild(div);
+    }
   });
 }
 
