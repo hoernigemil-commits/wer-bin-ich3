@@ -34,11 +34,14 @@ async function loadGame() {
   const list = document.getElementById("list");
   if (!list) return;
 
+  // 1️⃣ Alte Liste leeren
   list.innerHTML = "";
+
   const snapshot = await getDocs(playersRef);
 
-  snapshot.forEach(doc => {
-    const p = doc.data();
+  // 2️⃣ Nur andere Spieler anzeigen
+  snapshot.forEach(docSnap => {
+    const p = docSnap.data();
     if (p.realName !== myName) {
       const div = document.createElement("div");
       div.className = "card";
@@ -48,13 +51,9 @@ async function loadGame() {
   });
 }
 
+// Seite laden
 if (window.location.pathname.endsWith("game.html")) {
   loadGame();
-  setInterval(loadGame, 3000); // alle 3 Sekunden aktualisieren
+  // Optional: nur einmal laden, kein setInterval, wenn keine Live-Aktualisierung nötig
+  // setInterval(loadGame, 3000);
 }
-
-if (window.location.pathname.endsWith("game.html")) {
-  loadGame();
-  setInterval(loadGame, 3000);
-}
-
