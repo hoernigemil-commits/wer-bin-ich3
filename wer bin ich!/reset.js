@@ -6,7 +6,7 @@ const playersRef = collection(db, "players");
 const resetBtn = document.getElementById("resetBtn");
 resetBtn.addEventListener("click", async () => {
   const password = document.getElementById("adminPass").value;
-  if (password !== "1") { // <-- Passwort hier ändern
+  if (password !== "silvester2026") { // Passwort anpassen falls nötig
     alert("Falsches Passwort!");
     return;
   }
@@ -18,6 +18,8 @@ resetBtn.addEventListener("click", async () => {
     await deleteDoc(doc(db, "players", document.id));
   }
 
-  alert("Spiel wurde zurückgesetzt!");
-  window.location.href = "index.html"; // zurück zur ersten Seite
+  alert("🎉 Spiel wurde zurückgesetzt!");
+  
+  // Statt Weiterleitung: leere Input-Felder und Button bleibt sichtbar
+  document.getElementById("adminPass").value = "";
 });
