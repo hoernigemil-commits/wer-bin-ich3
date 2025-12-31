@@ -9,7 +9,7 @@ resetBtn.addEventListener("click", async (event) => {
   event.preventDefault(); // verhindert Page-Reload
 
   const password = document.getElementById("adminPass").value.trim();
-  if (password !== "1") { // <-- Passwort geändert
+  if (password !== "1") { // Passwort ändern wenn nötig
     alert("Falsches Passwort!");
     return;
   }
