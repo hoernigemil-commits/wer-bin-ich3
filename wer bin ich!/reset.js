@@ -17,12 +17,17 @@ resetBtn.addEventListener("click", async (event) => {
   if (!confirm("Willst du wirklich das Spiel zurücksetzen?")) return;
 
   try {
+    // Firestore leeren
     const snapshot = await getDocs(playersRef);
     for (const document of snapshot.docs) {
       await deleteDoc(doc(db, "players", document.id));
     }
 
-    statusMessage.textContent = "🎉 Spiel wurde erfolgreich zurückgesetzt!";
+    // LocalStorage zurücksetzen
+    localStorage.removeItem("realName");
+    localStorage.removeItem("roleSubmitted");
+
+    statusMessage.textContent = "🎉 Spiel wurde erfolgreich zurückgesetzt! Du kannst jetzt neu starten.";
     document.getElementById("adminPass").value = "";
   } catch (error) {
     statusMessage.textContent = "❌ Fehler beim Zurücksetzen: " + error.message;
